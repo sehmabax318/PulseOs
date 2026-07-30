@@ -1,20 +1,19 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-
-export interface AuthRequest extends Request {
-  user?: {
-    id: string;
-    role: string;
-  };
-}
+import { UserRole } from "../models/user.model";
 
 export const authMiddleware = (
-  req: AuthRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const authHeader = req.headers.authorization;
+
+    console.log("=================================");
+    console.log("AUTH HEADER:", authHeader);
+    console.log("JWT SECRET:", process.env.JWT_SECRET);
+    console.log("=================================");
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({
@@ -30,14 +29,22 @@ export const authMiddleware = (
       process.env.JWT_SECRET as string
     ) as {
       id: string;
-      role: string;
+      role: UserRole;
     };
 
-    req.user = decoded;
+    console.log("JWT VERIFIED ✅");
+    console.log(decoded);
+
+    req.user = {
+      id: decoded.id,
+      role: decoded.role,
+    };
 
     next();
-  } catch {
-    res.status(401).json({
+  } catch (err) {
+    console.log("JWT ERROR:", err);
+
+    return res.status(401).json({
       success: false,
       message: "Invalid or expired token.",
     });

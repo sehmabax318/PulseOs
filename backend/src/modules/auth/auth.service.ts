@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import User from "./auth.model";
+import User from "../../models/user.model";
 import { LoginUserDto, RegisterUserDto } from "./auth.types";
 
 class AuthService {
@@ -19,13 +19,13 @@ class AuthService {
     }
 
     // Create user
-    const user = await User.create({
-      name: data.name,
-      email: data.email,
-      password: data.password,
-      phone: data.phone,
-    });
-
+ const user = await User.create({
+  name: data.name,
+  email: data.email,
+  password: data.password,
+  phone: data.phone,
+  role: "admin",
+});
     return {
       success: true,
       message: "User registered successfully",

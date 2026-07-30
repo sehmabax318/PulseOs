@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
-import { AuthRequest } from "../../middleware/auth.middleware";
+
 import AppointmentService from "./appointment.service";
 
 class AppointmentController {
   /**
    * Create Appointment
    */
-async createAppointment(req: AuthRequest, res: Response) {
+async createAppointment(req: Request, res: Response) {
     try {
-   const patientId = req.user!.id;
+const patientId = (req as any).user.id;
 
       const result = await AppointmentService.createAppointment(
         patientId,

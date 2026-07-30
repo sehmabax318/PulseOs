@@ -1,13 +1,8 @@
-import { NextFunction, Response } from "express";
-import { AuthRequest } from "./auth.middleware";
+import { NextFunction, Request, Response } from "express";
 
 export const roleMiddleware =
   (...allowedRoles: string[]) =>
-  (
-    req: AuthRequest,
-    res: Response,
-    next: NextFunction
-  ) => {
+  (req: Request, res: Response, next: NextFunction) => {
     if (!req.user) {
       return res.status(401).json({
         success: false,

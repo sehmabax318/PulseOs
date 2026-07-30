@@ -1,7 +1,10 @@
 import { Router } from "express";
 
+import doctorRoutes from "../modules/doctor";
+import receptionistRoutes from "../modules/receptionist";
 import authRoutes from "../modules/auth/auth.routes";
 import appointmentRoutes from "../modules/appointment";
+import adminRoutes from "../modules/admin";   // <-- ADD THIS
 
 const router = Router();
 
@@ -17,5 +20,11 @@ router.use("/auth", authRoutes);
 
 // Appointments
 router.use("/appointments", appointmentRoutes);
+
+// Admin
+router.use("/admin", adminRoutes);   // <-- ADD THIS
+
+router.use("/receptionist", receptionistRoutes);
+router.use("/doctor", doctorRoutes);
 
 export default router;

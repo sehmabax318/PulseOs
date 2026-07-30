@@ -1,11 +1,14 @@
+import { AppointmentStatus } from "./appointment.model";
+
 export interface CreateAppointmentDto {
   appointmentDate: Date;
+  appointmentTime: string;
   department: string;
   reason: string;
 }
 
 export interface UpdateAppointmentStatusDto {
-  status: "approved" | "completed" | "cancelled";
+  status: AppointmentStatus;
   doctorId?: string;
 }
 

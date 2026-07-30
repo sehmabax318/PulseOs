@@ -1,3 +1,5 @@
+import crypto from "crypto";
+import QRCode from "qrcode";
 import Appointment from "./appointment.model";
 import {
   CreateAppointmentDto,
@@ -12,17 +14,43 @@ class AppointmentService {
     patientId: string,
     data: CreateAppointmentDto
   ) {
+    // Generate Queue Number
+    const queueNumber =
+      (await Appointment.countDocuments({
+        appointmentDate: data.appointmentDate,
+        department: data.department,
+      })) + 1;
+
+    // Generate Appointment ID
+    const appointmentId =
+      "APT-" + Date.now().toString().slice(-6);
+
+    // Generate Secure Token
+    const qrToken = crypto.randomBytes(32).toString("hex");
+
+    // Create Appointment
     const appointment = await Appointment.create({
+      appointmentId,
       patient: patientId,
+
       appointmentDate: data.appointmentDate,
+      appointmentTime: data.appointmentTime,
+
       department: data.department,
       reason: data.reason,
+
+      queueNumber,
+      qrToken,
     });
+
+    // Generate QR Image
+    const qrCode = await QRCode.toDataURL(qrToken);
 
     return {
       success: true,
       message: "Appointment created successfully",
       appointment,
+      qrCode,
     };
   }
 
