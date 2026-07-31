@@ -24,11 +24,14 @@ class DoctorController {
    * Start Consultation
    */
   async startConsultation(req: Request, res: Response) {
+    console.log("🔥 DoctorController.startConsultation HIT");
     try {
-      const result = await DoctorService.startConsultation(
-        req.params.id as string
-      );
+  const doctorId = req.user!.id;
 
+const result = await DoctorService.startConsultation(
+req.params.id as string,
+  doctorId
+);
       res.status(200).json(result);
     } catch (error: any) {
       res.status(400).json({
@@ -43,9 +46,12 @@ class DoctorController {
    */
   async completeConsultation(req: Request, res: Response) {
     try {
-      const result = await DoctorService.completeConsultation(
-        req.params.id as string
-      );
+     const doctorId = req.user!.id;
+
+const result = await DoctorService.completeConsultation(
+   req.params.id as string,
+  doctorId
+);
 
       res.status(200).json(result);
     } catch (error: any) {

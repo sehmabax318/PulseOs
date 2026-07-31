@@ -19,6 +19,13 @@ export const registerSchema = z.object({
   phone: z
     .string()
     .optional(),
+
+  role: z.enum([
+    "admin",
+    "doctor",
+    "patient",
+    "receptionist",
+  ]),
 });
 
 /**

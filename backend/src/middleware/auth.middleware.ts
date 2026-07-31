@@ -35,6 +35,11 @@ export const authMiddleware = (
     console.log("JWT VERIFIED ✅");
     console.log(decoded);
 
+    console.log("req.user before next:", {
+  id: decoded.id,
+  role: decoded.role,
+});
+
     req.user = {
       id: decoded.id,
       role: decoded.role,

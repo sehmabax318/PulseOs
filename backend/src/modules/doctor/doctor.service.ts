@@ -25,27 +25,44 @@ class DoctorService {
   /**
    * Start Consultation
    */
-  async startConsultation(appointmentId: string) {
-    const appointment = await Appointment.findByIdAndUpdate(
-      appointmentId,
-      {
-        status: AppointmentStatus.IN_CONSULTATION,
-        consultationStartedAt: new Date(),
-      },
-      {
-        new: true,
-      }
-    )
-      .populate("patient", "name email phone")
-      .populate("doctor", "name");
+  async startConsultation(
+    appointmentId: string,
+    doctorId: string
+  ) {
+    const appointment = await Appointment.findById(appointmentId);
 
     if (!appointment) {
       throw new Error("Appointment not found");
     }
 
+    // Ownership check
+    if (
+      !appointment.doctor ||
+      appointment.doctor.toString() !== doctorId
+    ) {
+      throw new Error(
+        "You are not authorized to access this appointment."
+      );
+    }
+
+    // Status validation
+    if (appointment.status !== AppointmentStatus.CHECKED_IN) {
+      throw new Error(
+        "Only checked-in appointments can be started."
+      );
+    }
+
+    appointment.status = AppointmentStatus.IN_CONSULTATION;
+    appointment.consultationStartedAt = new Date();
+
+    await appointment.save();
+
+    await appointment.populate("patient", "name email phone");
+    await appointment.populate("doctor", "name");
+
     return {
       success: true,
-      message: "Consultation started",
+      message: "Consultation started successfully.",
       appointment,
     };
   }
@@ -53,27 +70,46 @@ class DoctorService {
   /**
    * Complete Consultation
    */
-  async completeConsultation(appointmentId: string) {
-    const appointment = await Appointment.findByIdAndUpdate(
-      appointmentId,
-      {
-        status: AppointmentStatus.COMPLETED,
-        completedAt: new Date(),
-      },
-      {
-        new: true,
-      }
-    )
-      .populate("patient", "name email phone")
-      .populate("doctor", "name");
+  async completeConsultation(
+    appointmentId: string,
+    doctorId: string
+  ) {
+    const appointment = await Appointment.findById(appointmentId);
 
     if (!appointment) {
       throw new Error("Appointment not found");
     }
 
+    // Ownership check
+    if (
+      !appointment.doctor ||
+      appointment.doctor.toString() !== doctorId
+    ) {
+      throw new Error(
+        "You are not authorized to access this appointment."
+      );
+    }
+
+    // Status validation
+    if (
+      appointment.status !== AppointmentStatus.IN_CONSULTATION
+    ) {
+      throw new Error(
+        "Only active consultations can be completed."
+      );
+    }
+
+    appointment.status = AppointmentStatus.COMPLETED;
+    appointment.completedAt = new Date();
+
+    await appointment.save();
+
+    await appointment.populate("patient", "name email phone");
+    await appointment.populate("doctor", "name");
+
     return {
       success: true,
-      message: "Consultation completed",
+      message: "Consultation completed successfully.",
       appointment,
     };
   }

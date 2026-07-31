@@ -1,7 +1,14 @@
 import { z } from "zod";
 
 export const createAppointmentSchema = z.object({
+  doctorId: z.string().min(1, "Doctor is required"),
+
   appointmentDate: z.coerce.date(),
+
+  appointmentTime: z
+    .string()
+    .min(1, "Appointment time is required"),
+
   department: z
     .string()
     .min(2, "Department is required"),

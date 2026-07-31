@@ -18,14 +18,19 @@ class AuthService {
       throw new Error("Email already exists");
     }
 
+    console.log("REGISTER DATA:", data);
+
     // Create user
- const user = await User.create({
+const user = await User.create({
   name: data.name,
   email: data.email,
   password: data.password,
   phone: data.phone,
-  role: "admin",
+  role: data.role,
 });
+
+console.log("Saved Role:", user.role);
+
     return {
       success: true,
       message: "User registered successfully",

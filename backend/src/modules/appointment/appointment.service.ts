@@ -27,22 +27,23 @@ class AppointmentService {
 
     // Generate Secure Token
     const qrToken = crypto.randomBytes(32).toString("hex");
-
+console.log("Appointment Request Body:", data);
+console.log("Doctor ID:", data.doctorId);
     // Create Appointment
-    const appointment = await Appointment.create({
-      appointmentId,
-      patient: patientId,
+   const appointment = await Appointment.create({
+  appointmentId,
+  patient: patientId,
+  doctor: data.doctorId,
 
-      appointmentDate: data.appointmentDate,
-      appointmentTime: data.appointmentTime,
+  appointmentDate: data.appointmentDate,
+  appointmentTime: data.appointmentTime,
 
-      department: data.department,
-      reason: data.reason,
+  department: data.department,
+  reason: data.reason,
 
-      queueNumber,
-      qrToken,
-    });
-
+  queueNumber,
+  qrToken,
+});
     // Generate QR Image
     const qrCode = await QRCode.toDataURL(qrToken);
 
