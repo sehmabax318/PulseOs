@@ -1,5 +1,6 @@
 import { Router } from "express";
 
+import patientRoutes from "../modules/patient";
 import doctorRoutes from "../modules/doctor";
 import receptionistRoutes from "../modules/receptionist";
 import authRoutes from "../modules/auth/auth.routes";
@@ -26,5 +27,6 @@ router.use("/admin", adminRoutes);   // <-- ADD THIS
 
 router.use("/receptionist", receptionistRoutes);
 router.use("/doctor", doctorRoutes);
-
+console.log("patientRoutes =", patientRoutes);
+router.use("/patient", patientRoutes);
 export default router;
