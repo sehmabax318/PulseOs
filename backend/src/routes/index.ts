@@ -27,6 +27,6 @@ router.use("/admin", adminRoutes);   // <-- ADD THIS
 
 router.use("/receptionist", receptionistRoutes);
 router.use("/doctor", doctorRoutes);
-console.log("patientRoutes =", patientRoutes);
+
 router.use("/patient", patientRoutes);
 export default router;

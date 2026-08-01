@@ -10,11 +10,6 @@ export const authMiddleware = (
   try {
     const authHeader = req.headers.authorization;
 
-    console.log("=================================");
-    console.log("AUTH HEADER:", authHeader);
-    console.log("JWT SECRET:", process.env.JWT_SECRET);
-    console.log("=================================");
-
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({
         success: false,
@@ -32,13 +27,9 @@ export const authMiddleware = (
       role: UserRole;
     };
 
-    console.log("JWT VERIFIED ✅");
-    console.log(decoded);
+    
 
-    console.log("req.user before next:", {
-  id: decoded.id,
-  role: decoded.role,
-});
+
 
     req.user = {
       id: decoded.id,
@@ -47,7 +38,7 @@ export const authMiddleware = (
 
     next();
   } catch (err) {
-    console.log("JWT ERROR:", err);
+   
 
     return res.status(401).json({
       success: false,
